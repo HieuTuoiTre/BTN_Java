@@ -13,16 +13,12 @@ import java.time.format.DateTimeFormatter;
 
 public class AppointmentDialog extends JDialog {
     private JTextField txtName;
-    private JTextField txtLocation;
     private JSpinner spinStartHour;
     private JSpinner spinStartMinute;
     private JSpinner spinEndHour;
     private JSpinner spinEndMinute;
-    private JCheckBox chkGroup;
     private RoundedButton btnSave;
     private RoundedButton btnCancel;
-
-
 
     private LocalDate selectedDate;
     private Appointment appointmentToEdit;
@@ -38,7 +34,7 @@ public class AppointmentDialog extends JDialog {
 
         this.selectedDate = aptToEdit != null ? aptToEdit.getStartTime().toLocalDate() : date;
 
-        setTitle(aptToEdit == null ? "Thêm Cuộc Hẹn" : "Chỉnh Sửa Cuộc Hẹn");
+        setTitle(aptToEdit == null ? "Thêm Lịch Hẹn" : "Chỉnh Sửa Lịch Hẹn");
         setSize(480, 550);
         setLocationRelativeTo(parent);
         setResizable(false);
@@ -58,7 +54,7 @@ public class AppointmentDialog extends JDialog {
         panelHeader.setBackground(COLOR_PRIMARY);
         panelHeader.setBorder(new EmptyBorder(25, 0, 25, 0));
 
-        JLabel lblTitle = new JLabel("THÊM CUỘC HẸN MỚI");
+        JLabel lblTitle = new JLabel("THÊM LỊCH HẸN MỚI");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22));
         lblTitle.setForeground(Color.WHITE);
         lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -83,7 +79,7 @@ public class AppointmentDialog extends JDialog {
         gbc.insets = new Insets(12, 0, 12, 15);
 
         gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0.35;
-        JLabel lblName = new JLabel("Tên cuộc hẹn:");
+        JLabel lblName = new JLabel("Tên lịch hẹn:");
         lblName.setFont(new Font("Segoe UI", Font.BOLD, 14));
         lblName.setForeground(COLOR_TEXT_DARK);
         panelForm.add(lblName, gbc);
@@ -92,17 +88,6 @@ public class AppointmentDialog extends JDialog {
         txtName = new JTextField();
         styleTextField(txtName);
         panelForm.add(txtName, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 1;
-        JLabel lblLocation = new JLabel("Địa điểm:");
-        lblLocation.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        lblLocation.setForeground(COLOR_TEXT_DARK);
-        panelForm.add(lblLocation, gbc);
-
-        gbc.gridx = 1; gbc.gridy = 1;
-        txtLocation = new JTextField();
-        styleTextField(txtLocation);
-        panelForm.add(txtLocation, gbc);
 
         gbc.gridx = 0; gbc.gridy = 2;
         JLabel lblStart = new JLabel("Giờ bắt đầu:");
@@ -144,16 +129,6 @@ public class AppointmentDialog extends JDialog {
         panelEndTime.add(spinEndMinute);
         panelForm.add(panelEndTime, gbc);
 
-        gbc.gridx = 1; gbc.gridy = 4;
-        gbc.insets = new Insets(5, 0, 10, 15);
-        chkGroup = new JCheckBox("Đây là buổi họp nhóm");
-        chkGroup.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-        chkGroup.setBackground(COLOR_BG);
-        chkGroup.setForeground(COLOR_TEXT_DARK);
-        chkGroup.setFocusPainted(false);
-        chkGroup.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panelForm.add(chkGroup, gbc);
-
         add(panelForm, BorderLayout.CENTER);
 
         JPanel panelFooter = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 20));
@@ -166,7 +141,7 @@ public class AppointmentDialog extends JDialog {
         btnCancel.setForeground(new Color(100, 100, 100));
         btnCancel.setPreferredSize(new Dimension(120, 45));
 
-        btnSave = new RoundedButton("Lưu Cuộc Hẹn", 12, COLOR_PRIMARY, 1);
+        btnSave = new RoundedButton("Lưu Lịch Hẹn", 12, COLOR_PRIMARY, 1);
         btnSave.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnSave.setBackground(COLOR_PRIMARY);
         btnSave.setForeground(Color.WHITE);
@@ -213,15 +188,13 @@ public class AppointmentDialog extends JDialog {
 
     private void handleSave() {
         String name = txtName.getText().trim();
-        String location = txtLocation.getText().trim();
         int startH = (int) spinStartHour.getValue();
         int startM = (int) spinStartMinute.getValue();
         int endH = (int) spinEndHour.getValue();
         int endM = (int) spinEndMinute.getValue();
-        boolean isGroup = chkGroup.isSelected();
 
-        if (name.isEmpty() || location.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ Tên và Địa điểm!", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+        if (name.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ Tên", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -229,7 +202,7 @@ public class AppointmentDialog extends JDialog {
         LocalDateTime endTime = selectedDate.atTime(endH, endM);
 
         if (startTime.isBefore(LocalDateTime.now())) {
-            JOptionPane.showMessageDialog(this, "Không thể thêm cuộc hẹn vào thời gian hoặc ngày đã qua!", "Lỗi thời gian", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Không thể thêm lịch hẹn vào thời gian hoặc ngày đã qua!", "Lỗi thời gian", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -245,7 +218,7 @@ public class AppointmentDialog extends JDialog {
 
         if (conflictAppt != null) {
             int choice = JOptionPane.showConfirmDialog(this,
-                    "Bạn đã có cuộc hẹn: [" + conflictAppt.getName() + "] trong khung giờ này!\n\nBạn muốn GHI ĐÈ (thay thế) cuộc hẹn cũ bằng cuộc hẹn này không?\nChọn 'No' để ở lại và chọn khung giờ khác.",
+                    "Bạn đã có lịch hẹn: [" + conflictAppt.getName() + "] trong khung giờ này!\n\nBạn muốn GHI ĐÈ (thay thế) lịch hẹn cũ bằng lịch hẹn này không?\nChọn 'No' để ở lại và chọn khung giờ khác.",
                     "Trùng Lịch - Cảnh báo", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
             if (choice == JOptionPane.YES_OPTION) {
@@ -262,7 +235,7 @@ public class AppointmentDialog extends JDialog {
                     dialog.setVisible(true);
                     this.dispose();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Lỗi: Không thể ghi đè cuộc hẹn.", "Lỗi hệ thống", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Lỗi: Không thể ghi đè lịch hẹn.", "Lỗi hệ thống", JOptionPane.ERROR_MESSAGE);
                 }
             }
             return;
@@ -277,10 +250,10 @@ public class AppointmentDialog extends JDialog {
             boolean success = BLL.AppointmentManager.replaceAppointment(appointmentToEdit.getAppointmentId(), appointmentToEdit);
 
             if (success) {
-                JOptionPane.showMessageDialog(this, "Cập nhật cuộc hẹn thành công!");
+                JOptionPane.showMessageDialog(this, "Cập nhật lịch hẹn thành công!");
                 this.dispose();
             } else {
-                JOptionPane.showMessageDialog(this, "Lỗi: Không thể cập nhật cuộc hẹn.", "Lỗi hệ thống", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Lỗi: Không thể cập nhật lịch hẹn.", "Lỗi hệ thống", JOptionPane.ERROR_MESSAGE);
             }
         } else {
             Appointment newAppointment = new Appointment();
