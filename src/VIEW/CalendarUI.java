@@ -31,20 +31,23 @@ public class CalendarUI extends JFrame {
     private final Color COLOR_TEXT_DARK = new Color(33, 37, 41);
     private final Color COLOR_BORDER = new Color(226, 232, 240);
 
+    //buttons
+    //left
     private RoundedButton btnCalendar;
     private RoundedButton btnListAppointments;
     private RoundedButton btnListReminders;
+    //top right
     private RoundedButton btnPrev;
     private RoundedButton btnNext;
+    //bottom middle
     private RoundedButton btnToday;
     private RoundedButton btnAddAppointment;
-    private RoundedButton btnLogout;
 
     public CalendarUI() {
         this.currentYearMonth = YearMonth.now();
         this.selectedDate = LocalDate.now();
 
-        setTitle("Appointment Calendar");
+        setTitle("Calendar");
         setSize(1150, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -52,6 +55,7 @@ public class CalendarUI extends JFrame {
         getContentPane().setBackground(COLOR_BG);
 
         initComponents();
+        renderCalendar();
     }
 
     private void initComponents() {
@@ -86,36 +90,6 @@ public class CalendarUI extends JFrame {
 
         JPanel panelCalendarControls = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         panelCalendarControls.setBackground(COLOR_BG);
-
-
-
-        RoundedButton btnAddCal = new RoundedButton("+", 10, COLOR_PRIMARY, 1);
-        btnAddCal.setPreferredSize(new Dimension(45, 42));
-        btnAddCal.setBackground(COLOR_PRIMARY);
-        btnAddCal.setForeground(Color.WHITE);
-        btnAddCal.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        btnAddCal.setFocusPainted(false);
-        btnAddCal.setMargin(new Insets(0, 0, 0, 0));
-
-        RoundedButton btnEditCal = new RoundedButton("Sửa", 10, new Color(255, 193, 7), 1);
-        btnEditCal.setPreferredSize(new Dimension(55, 42));
-        btnEditCal.setBackground(new Color(255, 193, 7));
-        btnEditCal.setForeground(Color.BLACK);
-        btnEditCal.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnEditCal.setFocusPainted(false);
-        btnEditCal.setMargin(new Insets(0, 0, 0, 0));
-
-        RoundedButton btnDelCal = new RoundedButton("Xóa", 10, new Color(220, 53, 69), 1);
-        btnDelCal.setPreferredSize(new Dimension(55, 42));
-        btnDelCal.setBackground(new Color(220, 53, 69));
-        btnDelCal.setForeground(Color.WHITE);
-        btnDelCal.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnDelCal.setFocusPainted(false);
-        btnDelCal.setMargin(new Insets(0, 0, 0, 0));
-
-        panelCalendarControls.add(btnAddCal);
-        panelCalendarControls.add(btnEditCal);
-        panelCalendarControls.add(btnDelCal);
 
 
         btnPrev = createNavButton("<");
@@ -161,11 +135,13 @@ public class CalendarUI extends JFrame {
         JPanel panelFooter = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 20));
         panelFooter.setBackground(COLOR_BG);
 
+
+        //bottom buttons
         btnToday = new RoundedButton("Hôm nay", 20, COLOR_PRIMARY, 1);
         btnToday.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnToday.setBackground(Color.WHITE);
         btnToday.setForeground(COLOR_PRIMARY);
-        btnToday.setPreferredSize(new Dimension(100, 45));
+        btnToday.setPreferredSize(new Dimension(150, 45));
 
         btnAddAppointment = new RoundedButton("+ Thêm Cuộc Hẹn", 20, COLOR_PRIMARY, 1);
         btnAddAppointment.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -198,13 +174,11 @@ public class CalendarUI extends JFrame {
         });
 
         btnListAppointments.addActionListener(e -> {
-
             cardLayout.show(cardPanel, "LIST_VIEW");
             updateSidebarActive(btnListAppointments);
         });
 
         btnListReminders.addActionListener(e -> {
-
             cardLayout.show(cardPanel, "REMINDER_VIEW");
             updateSidebarActive(btnListReminders);
         });

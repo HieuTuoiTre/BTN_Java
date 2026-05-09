@@ -32,7 +32,7 @@ public class AppointmentListPanel extends JPanel {
         add(lblTitle, BorderLayout.NORTH);
 
         // Khởi tạo Bảng (Table)
-        String[] columns = {"ID", "Tên cuộc hẹn", "Bắt đầu", "Kết thúc", "Phân loại"};
+        String[] columns = {"ID", "Tên cuộc hẹn", "Bắt đầu", "Kết thúc"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; } // Không cho sửa trực tiếp trên ô
