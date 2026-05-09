@@ -71,15 +71,12 @@ public class CalendarUI extends JFrame {
         btnCalendar = createSidebarButton("Lịch của tôi", true);
         btnListAppointments = createSidebarButton("Danh sách Cuộc hẹn", false);
         btnListReminders = createSidebarButton("Trung tâm Thông báo", false);
-        btnLogout = createSidebarButton("Đăng xuất", false);
-        btnLogout.setForeground(new Color(220, 53, 69));
 
         panelSidebar.add(lblMenu);
         panelSidebar.add(btnCalendar);
         panelSidebar.add(btnListAppointments);
         panelSidebar.add(btnListReminders);
         panelSidebar.add(Box.createVerticalStrut(20));
-        panelSidebar.add(btnLogout);
 
         add(panelSidebar, BorderLayout.WEST);
 
@@ -211,8 +208,6 @@ public class CalendarUI extends JFrame {
             cardLayout.show(cardPanel, "REMINDER_VIEW");
             updateSidebarActive(btnListReminders);
         });
-
-        btnLogout.addActionListener(e -> logout() );
 
         btnPrev.addActionListener(e -> { currentYearMonth = currentYearMonth.minusMonths(1); renderCalendar(); });
         btnNext.addActionListener(e -> { currentYearMonth = currentYearMonth.plusMonths(1); renderCalendar(); });
@@ -353,12 +348,6 @@ public class CalendarUI extends JFrame {
         panelDays.repaint();
     }
 
-    private void logout() {
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Bạn có chắc chắn muốn đăng xuất không?",
-                "Xác nhận", JOptionPane.YES_NO_OPTION);
-
-    }
 
     private void handleAddAppointment() {
         if (selectedDate.isBefore(LocalDate.now())) {
