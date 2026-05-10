@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.HashSet;
 import java.util.List;
 
 public class CalendarUI extends JFrame {
@@ -27,11 +28,13 @@ public class CalendarUI extends JFrame {
     private ReminderListPanel centralPanel;
 
     private final Color COLOR_PRIMARY = new Color(0, 86, 179);
+    private final Color COLOR_BORDER_SELECTED = new Color(0, 0, 0);
+    private final Color COLOR_APPOINTED = new Color(218, 61, 67);
     private final Color COLOR_HOVER = new Color(225, 238, 255);
     private final Color COLOR_SELECTED = new Color(190, 220, 255);
     private final Color COLOR_BG = new Color(248, 250, 252);
     private final Color COLOR_TEXT_DARK = new Color(33, 37, 41);
-    private final Color COLOR_BORDER = new Color(226, 232, 240);
+    private final Color COLOR_BORDER = new Color(18, 20, 20);
 
     //buttons
     //left
@@ -286,6 +289,10 @@ public class CalendarUI extends JFrame {
         for (int i = 0; i < paddingDays; i++) panelDays.add(new JLabel(""));
 
         int daysInMonth = currentYearMonth.lengthOfMonth();
+
+        HashSet<Integer> appointedDays = BLL.AppointmentManager.getAppointedDays(currentYearMonth.getMonthValue(), currentYearMonth.getYear());
+
+        //coloring + styling
         for (int day = 1; day <= daysInMonth; day++) {
             RoundedButton btnDay = new RoundedButton(String.valueOf(day), 15, COLOR_BORDER, 1);
 
@@ -293,24 +300,39 @@ public class CalendarUI extends JFrame {
             boolean isSunday = ((paddingDays + day - 1) % 7 == 0);
             boolean isToday = thisButtonDate.equals(LocalDate.now());
             boolean isSelected = thisButtonDate.equals(selectedDate);
+            boolean isAppointed = appointedDays.contains(day);
 
             if (isToday) {
                 btnDay.setBackground(COLOR_PRIMARY);
                 btnDay.setForeground(Color.WHITE);
                 btnDay.setFont(new Font("Segoe UI", Font.BOLD, 22));
-                btnDay.setCustomBorder(isSelected ? Color.BLACK : COLOR_PRIMARY, isSelected ? 2 : 1);
+                //if today is selected, made the border black
+                btnDay.setCustomBorder(isSelected ? Color.BLACK : COLOR_BORDER_SELECTED, isSelected ? 5 : 1);
+            }
+            else if (isSelected && isAppointed){
+                btnDay.setBackground(COLOR_APPOINTED);
+                btnDay.setForeground(Color.WHITE);
+                btnDay.setFont(new Font("Segoe UI", Font.BOLD, 20));
+                btnDay.setCustomBorder(COLOR_BORDER_SELECTED, 5);
             }
             else if (isSelected) {
                 btnDay.setBackground(COLOR_SELECTED);
                 btnDay.setForeground(COLOR_PRIMARY);
                 btnDay.setFont(new Font("Segoe UI", Font.BOLD, 20));
-                btnDay.setCustomBorder(COLOR_PRIMARY, 2);
+                btnDay.setCustomBorder(COLOR_BORDER_SELECTED, 5);
             }
             else {
                 btnDay.setBackground(Color.WHITE);
                 btnDay.setForeground(isSunday ? new Color(220, 53, 69) : COLOR_TEXT_DARK);
                 btnDay.setFont(new Font("Segoe UI", Font.BOLD, 18));
-                btnDay.setCustomBorder(COLOR_BORDER, 1);
+
+                if (isAppointed){
+                    btnDay.setBackground(COLOR_APPOINTED);
+                    btnDay.setForeground(Color.WHITE);
+                    btnDay.setFont(new Font("Segoe UI", Font.BOLD, 20));
+                } else {
+                    btnDay.setCustomBorder(COLOR_BORDER, 1);
+                }
             }
 
             btnDay.addActionListener(e -> {

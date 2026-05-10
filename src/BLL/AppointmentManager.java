@@ -8,6 +8,7 @@ import DAL.AppointmentDAL;
 import DTO.Appointment;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 
 public class AppointmentManager {
@@ -17,6 +18,10 @@ public class AppointmentManager {
 
     public static Appointment getAppointmentById(int appointmentId) {
         return AppointmentDAL.getAppointmentById(appointmentId);
+    }
+
+    public static HashSet<Integer> getAppointedDays(int month, int year){
+        return AppointmentDAL.getAppointedDays(month,year);
     }
 
     public static String addAppointment(Appointment appointment) {

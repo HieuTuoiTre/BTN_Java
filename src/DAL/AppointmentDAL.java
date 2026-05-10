@@ -3,9 +3,11 @@ package DAL;
 import BLL.DBConnection;
 import DTO.Appointment;
 
+import javax.swing.*;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class AppointmentDAL {
@@ -30,6 +32,30 @@ public class AppointmentDAL {
             }
         } catch (SQLException e) {}
         return list;
+    }
+
+    public static HashSet<Integer> getAppointedDays(int month, int year){
+        HashSet<Integer> daysWithAppointment = new HashSet<Integer>();
+        String sql = "SELECT DISTINCT DAY(start_time) AS day FROM Appointments " +
+                     "WHERE MONTH(start_time) = ? AND YEAR(start_time) = ?";
+
+        try (
+            Connection conn = BLL.DBConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)
+        ){
+
+            stmt.setInt(1, month);
+            stmt.setInt(2, year);
+
+            try (ResultSet rs = stmt.executeQuery()){
+                while (rs.next()){
+                    daysWithAppointment.add(rs.getInt("day"));
+                }
+            }
+        } catch (SQLException e){
+             e.printStackTrace();
+        }
+        return daysWithAppointment;
     }
 
     public static Appointment getAppointmentById(int appointmentId) {
