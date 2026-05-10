@@ -1,5 +1,7 @@
 package VIEW;
 
+import DTO.Appointment;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -174,6 +176,7 @@ public class CalendarUI extends JFrame {
         });
 
         btnListAppointments.addActionListener(e -> {
+            appointmentListPanel.loadData();
             cardLayout.show(cardPanel, "LIST_VIEW");
             updateSidebarActive(btnListAppointments);
         });
