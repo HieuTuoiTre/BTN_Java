@@ -126,7 +126,9 @@ public class AppointmentListPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một cuộc hẹn để xem chi tiết!", "Nhắc nhở", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
+        Appointment selectedApt = currentList.get(selectedRow);
+        AppointmentDetail dialog = new AppointmentDetail((Frame) SwingUtilities.getWindowAncestor(this), true, selectedApt);
+        dialog.setVisible(true);
     }
 
     private void handleAddReminder() {
