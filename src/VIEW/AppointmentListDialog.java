@@ -115,10 +115,8 @@ public class AppointmentListDialog extends JDialog { // Kế thừa JDialog
 
         mainPanel.add(panelFooter, BorderLayout.SOUTH);
 
-        // Đưa khung chính vào cửa sổ
         getContentPane().add(mainPanel);
 
-        // Bắt sự kiện
         btnView.addActionListener(e -> handleViewDetails());
         btnAddReminder.addActionListener(e -> handleAddReminder());
         btnEdit.addActionListener(e -> handleEdit());
@@ -130,7 +128,6 @@ public class AppointmentListDialog extends JDialog { // Kế thừa JDialog
     public void loadData() {
         tableModel.setRowCount(0);
         if (currentDate != null) {
-            // Nhớ gọi hàm getAppointmentsByDate mà chúng ta vừa tạo ở DAL!
             currentList = AppointmentManager.getAppointmentByDate(currentDate);
         } else {
             currentList = AppointmentManager.getUpcomingAppointments();
@@ -153,7 +150,6 @@ public class AppointmentListDialog extends JDialog { // Kế thừa JDialog
             return;
         }
         Appointment selectedApt = currentList.get(selectedRow);
-        // Chú ý: Dùng (Frame) this.getParent() để tìm ra Frame gốc, tránh lỗi ClassCastException
         AppointmentDetail dialog = new AppointmentDetail((Frame) this.getParent(), true, selectedApt);
         dialog.setVisible(true);
     }
@@ -200,7 +196,6 @@ public class AppointmentListDialog extends JDialog { // Kế thừa JDialog
 
         Appointment selectedApt = currentList.get(selectedRow);
 
-        // Chú ý: Dùng (Frame) this.getParent() để tránh lỗi cast JDialog về Frame
         AppointmentDialog editForm = new AppointmentDialog((Frame) this.getParent(), true, null, selectedApt);
         editForm.setVisible(true);
         loadData();
