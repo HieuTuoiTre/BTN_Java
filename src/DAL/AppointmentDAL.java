@@ -43,7 +43,6 @@ public class AppointmentDAL {
             Connection conn = BLL.DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)
         ){
-
             stmt.setInt(1, month);
             stmt.setInt(2, year);
 
@@ -112,7 +111,7 @@ public class AppointmentDAL {
     }
     
     public static boolean updateAppointment(Appointment appointment) {
-        String sql = "UPDATE Appointments SET name = ?, start_time = ?, end_time = ?, WHERE appointment_id = ?";
+        String sql = "UPDATE Appointments SET name = ?, start_time = ?, end_time = ? WHERE appointment_id = ?";
         
         try (Connection conn = BLL.DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

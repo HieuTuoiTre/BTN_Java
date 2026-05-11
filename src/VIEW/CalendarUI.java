@@ -34,7 +34,7 @@ public class CalendarUI extends JFrame {
     private final Color COLOR_SELECTED = new Color(190, 220, 255);
     private final Color COLOR_BG = new Color(248, 250, 252);
     private final Color COLOR_TEXT_DARK = new Color(33, 37, 41);
-    private final Color COLOR_BORDER = new Color(18, 20, 20);
+    private final Color COLOR_BORDER = new Color(194, 255, 255);
 
     //buttons
     //left
