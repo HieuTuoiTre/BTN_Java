@@ -195,6 +195,7 @@ public class CalendarUI extends JFrame {
         btnListReminders.addActionListener(e -> {
             cardLayout.show(cardPanel, "REMINDER_VIEW");
             updateSidebarActive(btnListReminders);
+            centralPanel.refreshReminders();
         });
 
         btnPrev.addActionListener(e -> { currentYearMonth = currentYearMonth.minusMonths(1); renderCalendar(); });
