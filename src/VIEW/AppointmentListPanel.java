@@ -100,8 +100,8 @@ public class AppointmentListPanel extends JPanel {
 
         btnView.addActionListener(e -> handleViewDetails());
         btnAddReminder.addActionListener(e -> handleAddReminder());
-        btnDelete.addActionListener(e -> handleDelete());
         btnEdit.addActionListener(e -> handleEdit());
+        btnDelete.addActionListener(e -> handleDelete());
 
         loadData();
     }
@@ -165,6 +165,7 @@ public class AppointmentListPanel extends JPanel {
 
     private void handleEdit() {
         int selectedRow = table.getSelectedRow();
+        //nothing selected
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một cuộc hẹn để sửa!", "Nhắc nhở", JOptionPane.WARNING_MESSAGE);
             return;

@@ -239,7 +239,6 @@ public class AppointmentDialog extends JDialog {
                 }
             }
             return;
-            //add something to reload AppointmentDialog here
         }
 
         // 3. NẾU KHÔNG CÓ GÌ BẤT THƯỜNG -> TẠO MỚI
