@@ -47,6 +47,7 @@ public class CalendarUI extends JFrame {
     //bottom middle
     private RoundedButton btnToday;
     private RoundedButton btnAddAppointment;
+    private RoundedButton btnViewAppointment;
 
     public CalendarUI() {
         this.currentYearMonth = YearMonth.now();
@@ -154,8 +155,15 @@ public class CalendarUI extends JFrame {
         btnAddAppointment.setForeground(Color.WHITE);
         btnAddAppointment.setPreferredSize(new Dimension(200, 45));
 
+        btnViewAppointment = new RoundedButton("Xem Cuộc Hẹn", 20, COLOR_PRIMARY, 1);
+        btnViewAppointment.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        btnViewAppointment.setBackground(COLOR_PRIMARY);
+        btnViewAppointment.setForeground(Color.WHITE);
+        btnViewAppointment.setPreferredSize(new Dimension(200, 45));
+
         panelFooter.add(btnAddAppointment);
         panelFooter.add(btnToday);
+        panelFooter.add(btnViewAppointment);
         panelMainContent.add(panelFooter, BorderLayout.SOUTH);
 
         // --- CARD LAYOUT CONFIG ---
@@ -201,6 +209,7 @@ public class CalendarUI extends JFrame {
         comboMonth.addActionListener(e -> jumpToSelectedDate());
         spinYear.addChangeListener(e -> jumpToSelectedDate());
         btnAddAppointment.addActionListener(e -> handleAddAppointment());
+        btnViewAppointment.addActionListener(e-> handleViewAppointment());
     }
 
     private void updateSidebarActive(RoundedButton activeBtn) {
@@ -356,6 +365,11 @@ public class CalendarUI extends JFrame {
 
         AppointmentDialog addForm = new AppointmentDialog(this, true, selectedDate, null);
         addForm.setVisible(true);
+        renderCalendar();
+    }
+    private void handleViewAppointment(){
+        AppointmentListDialog listForm = new AppointmentListDialog(this, true, selectedDate);
+        listForm.setVisible(true);
         renderCalendar();
     }
 

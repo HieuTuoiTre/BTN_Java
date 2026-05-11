@@ -81,6 +81,35 @@ public class AppointmentDAL {
         return appointment;
     }
 
+
+    public static List<Appointment> getAppointmentsByDate(java.time.LocalDate date) {
+        List<Appointment> list = new ArrayList<>();
+
+        String sql = "SELECT * FROM Appointments WHERE DATE(start_time) = ? ORDER BY start_time ASC";
+
+        try (Connection conn = BLL.DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+
+            stmt.setDate(1, java.sql.Date.valueOf(date));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Appointment appointment = new Appointment();
+                    appointment.setAppointmentId(rs.getInt("appointment_id"));
+                    appointment.setName(rs.getString("name"));
+                    appointment.setStartTime(rs.getTimestamp("start_time").toLocalDateTime());
+                    appointment.setEndTime(rs.getTimestamp("end_time").toLocalDateTime());
+
+                    list.add(appointment);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public static int insertAppointment(Appointment appointment) {
         String sql = "INSERT INTO Appointments (name, start_time, end_time) VALUES (?, ?, ?)";
 
@@ -141,28 +170,5 @@ public class AppointmentDAL {
         }
     }
 
-    public static List<Appointment> getUpcomingAppointmentsByCalendar() {
-        List<Appointment> list = new ArrayList<>();
-        String sql = "SELECT DISTINCT a.* FROM Appointments a " +
-                "WHERE a.end_time >= NOW() " +
-                "ORDER BY a.start_time ASC";
 
-        try (Connection conn = BLL.DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Appointment appointment = new Appointment();
-                    appointment.setAppointmentId(rs.getInt("appointment_id"));
-                    appointment.setName(rs.getString("name"));
-                    appointment.setStartTime(rs.getTimestamp("start_time").toLocalDateTime());
-                    appointment.setEndTime(rs.getTimestamp("end_time").toLocalDateTime());
-                    list.add(appointment);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return list;
-    }
 }
