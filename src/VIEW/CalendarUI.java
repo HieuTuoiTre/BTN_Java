@@ -10,7 +10,6 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.HashSet;
-import java.util.List;
 
 public class CalendarUI extends JFrame {
     private YearMonth currentYearMonth;
@@ -29,6 +28,7 @@ public class CalendarUI extends JFrame {
 
     private final Color COLOR_PRIMARY = new Color(0, 86, 179);
     private final Color COLOR_BORDER_SELECTED = new Color(0, 0, 0);
+    private final Color COLOR_TODAY_APPOINTED = new Color(27, 119, 35);
     private final Color COLOR_APPOINTED = new Color(218, 61, 67);
     private final Color COLOR_HOVER = new Color(225, 238, 255);
     private final Color COLOR_SELECTED = new Color(190, 220, 255);
@@ -312,11 +312,16 @@ public class CalendarUI extends JFrame {
             boolean isSelected = thisButtonDate.equals(selectedDate);
             boolean isAppointed = appointedDays.contains(day);
 
-            if (isToday) {
+            if (isToday && isAppointed) {
+                btnDay.setBackground(COLOR_TODAY_APPOINTED);
+                btnDay.setForeground(Color.WHITE);
+                btnDay.setFont(new Font("Segoe UI", Font.BOLD, 22));
+                btnDay.setCustomBorder(isSelected ? Color.BLACK : COLOR_BORDER_SELECTED, isSelected ? 5 : 1);
+            }
+            else if (isToday){
                 btnDay.setBackground(COLOR_PRIMARY);
                 btnDay.setForeground(Color.WHITE);
                 btnDay.setFont(new Font("Segoe UI", Font.BOLD, 22));
-                //if today is selected, made the border black
                 btnDay.setCustomBorder(isSelected ? Color.BLACK : COLOR_BORDER_SELECTED, isSelected ? 5 : 1);
             }
             else if (isSelected && isAppointed){
