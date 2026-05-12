@@ -53,7 +53,7 @@ public class CalendarUI extends JFrame {
         this.currentYearMonth = YearMonth.now();
         this.selectedDate = LocalDate.now();
 
-        setTitle("Calendar");
+        setTitle("Thời gian biểu");
         setSize(1150, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -74,13 +74,13 @@ public class CalendarUI extends JFrame {
                 new EmptyBorder(20, 10, 20, 10)
         ));
 
-        JLabel lblMenu = new JLabel("MENU CHÍNH");
+        JLabel lblMenu = new JLabel("MENU");
         lblMenu.setFont(new Font("Segoe UI", Font.BOLD, 15));
         lblMenu.setForeground(Color.GRAY);
 
-        btnCalendar = createSidebarButton("Lịch của tôi", true);
-        btnListAppointments = createSidebarButton("Danh sách Cuộc hẹn", false);
-        btnListReminders = createSidebarButton("Trung tâm Thông báo", false);
+        btnCalendar = createSidebarButton("Lịch", true);
+        btnListAppointments = createSidebarButton("Danh sách lịch hẹn", false);
+        btnListReminders = createSidebarButton("Lịch hẹn trong 24h", false);
 
         panelSidebar.add(lblMenu);
         panelSidebar.add(btnCalendar);
@@ -149,13 +149,13 @@ public class CalendarUI extends JFrame {
         btnToday.setForeground(COLOR_PRIMARY);
         btnToday.setPreferredSize(new Dimension(150, 45));
 
-        btnAddAppointment = new RoundedButton("+ Thêm Cuộc Hẹn", 20, COLOR_PRIMARY, 1);
+        btnAddAppointment = new RoundedButton("+ Thêm lịch hẹn", 20, COLOR_PRIMARY, 1);
         btnAddAppointment.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnAddAppointment.setBackground(COLOR_PRIMARY);
         btnAddAppointment.setForeground(Color.WHITE);
         btnAddAppointment.setPreferredSize(new Dimension(200, 45));
 
-        btnViewAppointment = new RoundedButton("Xem Cuộc Hẹn", 20, COLOR_PRIMARY, 1);
+        btnViewAppointment = new RoundedButton("Xem lịch hẹn", 20, COLOR_PRIMARY, 1);
         btnViewAppointment.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnViewAppointment.setBackground(COLOR_PRIMARY);
         btnViewAppointment.setForeground(Color.WHITE);
@@ -302,7 +302,7 @@ public class CalendarUI extends JFrame {
 
         HashSet<Integer> appointedDays = BLL.AppointmentManager.getAppointedDays(currentYearMonth.getMonthValue(), currentYearMonth.getYear());
 
-        //coloring + styling
+        //coloring + styling for each conditions
         for (int day = 1; day <= daysInMonth; day++) {
             RoundedButton btnDay = new RoundedButton(String.valueOf(day), 15, COLOR_BORDER, 1);
 

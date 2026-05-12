@@ -18,8 +18,8 @@ public class AppointmentDetail extends JDialog {
         super(parent, modal ? ModalityType.APPLICATION_MODAL : ModalityType.MODELESS);
         this.currentApt = apt;
 
-        setTitle("Chi Tiết Cuộc Hẹn");
-        setSize(700, 700);
+        setTitle("Chi tiết lịch hẹn");
+        setSize(280, 350);
         setLocationRelativeTo(parent);
         setResizable(false);
         getContentPane().setBackground(COLOR_BG);
@@ -40,14 +40,8 @@ public class AppointmentDetail extends JDialog {
         lblTitle.setForeground(Color.WHITE);
         lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel lblType = new JLabel("(Cuộc Hẹn Cá Nhân)");
-        lblType.setFont(new Font("Segoe UI", Font.ITALIC, 14));
-        lblType.setForeground(new Color(220, 235, 255));
-        lblType.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         panelHeader.add(lblTitle);
         panelHeader.add(Box.createVerticalStrut(5));
-        panelHeader.add(lblType);
         add(panelHeader, BorderLayout.NORTH);
 
         // --- CENTER INFO ---
@@ -68,13 +62,6 @@ public class AppointmentDetail extends JDialog {
 
         panelInfo.add(lblStart); panelInfo.add(lblEnd);
         panelCenter.add(panelInfo, BorderLayout.NORTH);
-
-
-        JLabel lblNoParticipants = new JLabel("Hiếu Nghĩa Mập");
-        lblNoParticipants.setFont(new Font("Segoe UI", Font.ITALIC, 14));
-        lblNoParticipants.setForeground(Color.GRAY);
-        panelCenter.add(lblNoParticipants, BorderLayout.CENTER);
-
 
         add(panelCenter, BorderLayout.CENTER);
 

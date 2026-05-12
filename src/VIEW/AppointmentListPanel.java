@@ -25,14 +25,14 @@ public class AppointmentListPanel extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
         // Tiêu đề
-        JLabel lblTitle = new JLabel("Danh sách Cuộc hẹn Sắp tới", SwingConstants.LEFT);
+        JLabel lblTitle = new JLabel("Danh sách lịch hẹn", SwingConstants.LEFT);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22));
         lblTitle.setForeground(new Color(0, 86, 179));
         lblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         add(lblTitle, BorderLayout.NORTH);
 
         // Khởi tạo Bảng (Table)
-        String[] columns = {"ID", "Tên cuộc hẹn", "Bắt đầu", "Kết thúc"};
+        String[] columns = {"ID", "Tên lịch hẹn", "Giờ bắt đầu", "Giờ kết thúc"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; } // Không cho sửa trực tiếp trên ô
