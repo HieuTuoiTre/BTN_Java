@@ -20,6 +20,8 @@ public class AppointmentDialog extends JDialog {
     private RoundedButton btnSave;
     private RoundedButton btnCancel;
 
+    private JCheckBox Weekly;
+
     private LocalDate selectedDate;
     private Appointment appointmentToEdit;
 
@@ -128,6 +130,18 @@ public class AppointmentDialog extends JDialog {
         panelEndTime.add(sep2);
         panelEndTime.add(spinEndMinute);
         panelForm.add(panelEndTime, gbc);
+
+
+
+        gbc.gridx = 1; gbc.gridy = 4;
+        gbc.insets = new Insets(5, 0, 10, 15);
+        Weekly = new JCheckBox("Đặt lịch hàng tuần (trong 4 tuần tới)");
+        Weekly.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        Weekly.setBackground(COLOR_BG);
+        Weekly.setForeground(COLOR_TEXT_DARK);
+        Weekly.setFocusPainted(false);
+        Weekly.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        panelForm.add(Weekly, gbc);
 
         add(panelForm, BorderLayout.CENTER);
 
@@ -255,21 +269,35 @@ public class AppointmentDialog extends JDialog {
             } else {
                 JOptionPane.showMessageDialog(this, "Lỗi: Không thể cập nhật lịch hẹn.", "Lỗi hệ thống", JOptionPane.ERROR_MESSAGE);
             }
-        } else {
-            Appointment newAppointment = new Appointment();
-            newAppointment.setName(name);
-            newAppointment.setStartTime(startTime);
-            newAppointment.setEndTime(endTime);
+        }
 
-            String result = BLL.AppointmentManager.addAppointment(newAppointment);
+     else {
+            int weeks = Weekly.isSelected() ? 4 : 1; // Nếu chọn hàng tuần thì tạo 4 lần, ngược lại tạo 1 lần
+            boolean allSuccess = true;
 
-            if (result.equals("SUCCESS")) {
-                ReminderDialog dialog = new ReminderDialog(AppointmentDialog.this, true, newAppointment, null);
-                dialog.setVisible(true);
+            for (int i = 0; i < weeks; i++) {
+                Appointment newAppointment = new Appointment();
+                newAppointment.setName(name + (weeks > 1 ? " (Tuần " + (i + 1) + ")" : ""));
+
+                // Cộng thêm i tuần vào thời gian bắt đầu và kết thúc
+                newAppointment.setStartTime(startTime.plusWeeks(i));
+                newAppointment.setEndTime(endTime.plusWeeks(i));
+
+                String result = BLL.AppointmentManager.addAppointment(newAppointment);
+                if (result.equals("SUCCESS")) {
+                    ReminderDialog dialog = new ReminderDialog(AppointmentDialog.this, true, newAppointment, null);
+                    dialog.setVisible(true);
+                    this.dispose();
+                }else allSuccess = false;
+            }
+
+            if (allSuccess) {
+                JOptionPane.showMessageDialog(this, "Đã thêm " + weeks + " cuộc hẹn thành công!");
                 this.dispose();
             } else {
-                JOptionPane.showMessageDialog(this, result, "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Có lỗi xảy ra trong quá trình tạo lịch lặp lại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
+
 }
