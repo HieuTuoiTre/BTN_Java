@@ -62,6 +62,7 @@ public class CalendarUI extends JFrame {
 
         initComponents();
         renderCalendar();
+        new ReminderNotification();
     }
 
     private void initComponents() {
