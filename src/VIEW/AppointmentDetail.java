@@ -18,7 +18,7 @@ public class AppointmentDetail extends JDialog {
         this.currentApt = apt;
 
         setTitle("Chi tiết lịch hẹn");
-        setSize(280, 350);
+        setSize(450, 600);
         setLocationRelativeTo(parent);
         setResizable(false);
         getContentPane().setBackground(COLOR_BG);
