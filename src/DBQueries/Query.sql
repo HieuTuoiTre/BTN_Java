@@ -26,3 +26,4 @@ VALUES ('Họp cố vấn học tập sinh viên',  '2026-05-10 19:00:00', '2026
 INSERT INTO Reminders (appointment_id, reminder_type, target_time, message)
 VALUES (1 , 'H1', '2026-06-10 06:00:00', 'Chuẩn bị slide bảo vệ!');
 
+ALTER TABLE Reminders ADD COLUMN is_notified TINYINT(1) DEFAULT 0;

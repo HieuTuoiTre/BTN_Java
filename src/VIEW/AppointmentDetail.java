@@ -2,7 +2,6 @@ package VIEW;
 
 
 import DTO.Appointment;
-import DTO.Reminder;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;

@@ -5,7 +5,6 @@ import DTO.Appointment;
 
 import javax.swing.*;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +14,7 @@ public class AppointmentDAL {
         List<Appointment> list = new ArrayList<>();
         String sql = "SELECT * FROM Appointments";
         
-        try (Connection conn = BLL.DBConnection.getConnection();
+        try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
 
@@ -40,7 +39,7 @@ public class AppointmentDAL {
                      "WHERE MONTH(start_time) = ? AND YEAR(start_time) = ?";
 
         try (
-            Connection conn = BLL.DBConnection.getConnection();
+            Connection conn = DBConnection.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)
         ){
             stmt.setInt(1, month);
@@ -61,7 +60,7 @@ public class AppointmentDAL {
         Appointment appointment = null;
         String sql = "SELECT * FROM Appointments WHERE appointment_id = ?";
 
-        try (Connection conn = BLL.DBConnection.getConnection();
+        try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, appointmentId);
@@ -87,7 +86,7 @@ public class AppointmentDAL {
 
         String sql = "SELECT * FROM Appointments WHERE DATE(start_time) = ? ORDER BY start_time ASC";
 
-        try (Connection conn = BLL.DBConnection.getConnection();
+        try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
 
@@ -113,7 +112,7 @@ public class AppointmentDAL {
     public static int insertAppointment(Appointment appointment) {
         String sql = "INSERT INTO Appointments (name, start_time, end_time) VALUES (?, ?, ?)";
 
-        try (Connection con = BLL.DBConnection.getConnection();
+        try (Connection con = DBConnection.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, appointment.getName());
@@ -142,7 +141,7 @@ public class AppointmentDAL {
     public static boolean updateAppointment(Appointment appointment) {
         String sql = "UPDATE Appointments SET name = ?, start_time = ?, end_time = ? WHERE appointment_id = ?";
         
-        try (Connection conn = BLL.DBConnection.getConnection();
+        try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setString(1, appointment.getName());
@@ -159,7 +158,7 @@ public class AppointmentDAL {
     
     public static boolean deleteAppointment(int appointmentId) {
         String sql = "DELETE FROM Appointments WHERE appointment_id = ?";
-        try (Connection conn = BLL.DBConnection.getConnection();
+        try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setInt(1, appointmentId);

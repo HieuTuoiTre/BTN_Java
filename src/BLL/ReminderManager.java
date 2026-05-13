@@ -57,6 +57,12 @@ public class ReminderManager {
     }
 
     public static boolean deleteRemindersByAppointmentId(int appointmentId) {
-        return DAL.ReminderDAL.deleteRemindersByAppointmentId(appointmentId);
+        return ReminderDAL.deleteRemindersByAppointmentId(appointmentId);
+    }
+    public static List<Reminder> getDueReminders(){
+        return ReminderDAL.getDueReminders();
+    }
+    public static void markAsNotified(int reminderId){
+        ReminderDAL.markAsNotified(reminderId);
     }
 }
