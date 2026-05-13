@@ -1,6 +1,6 @@
 package VIEW;
 
-import BLL.AppointmentManager;
+
 import BLL.ReminderManager;
 import DTO.Appointment;
 

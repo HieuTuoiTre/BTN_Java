@@ -1,6 +1,5 @@
 package VIEW;
 
-import DTO.Appointment;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,6 +9,8 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.HashSet;
+
+
 
 public class CalendarUI extends JFrame {
     private YearMonth currentYearMonth;
@@ -62,6 +63,7 @@ public class CalendarUI extends JFrame {
 
         initComponents();
         renderCalendar();
+        new ReminderNotification();
     }
 
     private void initComponents() {

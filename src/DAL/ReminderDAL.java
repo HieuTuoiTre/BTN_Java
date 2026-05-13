@@ -74,4 +74,33 @@ public class ReminderDAL {
             return true;
         } catch (SQLException e) { return false; }
     }
+    public static List<Reminder> getDueReminders() {
+        List<Reminder> list = new ArrayList<>();
+        // Lấy các reminder có target_time nhỏ hơn hoặc bằng hiện tại VÀ chưa thông báo
+        String sql = "SELECT * FROM Reminders WHERE target_time <= NOW() AND is_notified = 0";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                list.add(new Reminder(
+                        rs.getInt("reminder_id"),
+                        rs.getInt("appointment_id"),
+                        Reminder.ReminderType.valueOf(rs.getString("reminder_type")),
+                        rs.getTimestamp("target_time").toLocalDateTime(),
+                        rs.getString("message")
+                ));
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return list;
+    }
+
+    public static void markAsNotified(int reminderId) {
+        String sql = "UPDATE Reminders SET is_notified = 1 WHERE reminder_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, reminderId);
+            stmt.executeUpdate();
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
 }
