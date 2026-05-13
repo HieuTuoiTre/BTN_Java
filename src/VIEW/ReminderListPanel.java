@@ -39,7 +39,7 @@ public class ReminderListPanel extends JPanel {
         add(lblTitle, BorderLayout.NORTH);
 
         // 2. Cấu hình Bảng (Table)
-        String[] columns = {"ID", "Tên cuộc hẹn", "Nội dung Reminder", "Loại thông báo", "Thời điểm báo"};
+        String[] columns = {"ID", "Tên lịch hẹn", "Nội dung nhắc nhở", "Loại thông báo", "Thời điểm báo"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
