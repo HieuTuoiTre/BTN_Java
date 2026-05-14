@@ -19,6 +19,7 @@ public class AppointmentDialog extends JDialog {
     private JSpinner spinEndMinute;
     private RoundedButton btnSave;
     private RoundedButton btnCancel;
+    private JTextField times;
 
     private JCheckBox Weekly;
 
@@ -135,13 +136,18 @@ public class AppointmentDialog extends JDialog {
 
         gbc.gridx = 1; gbc.gridy = 4;
         gbc.insets = new Insets(5, 0, 10, 15);
-        Weekly = new JCheckBox("Đặt lịch hàng tuần (trong 4 tuần tới)");
+        Weekly = new JCheckBox("Đặt lịch hàng tuần với số lần : ");
         Weekly.setFont(new Font("Segoe UI", Font.PLAIN, 15));
         Weekly.setBackground(COLOR_BG);
         Weekly.setForeground(COLOR_TEXT_DARK);
         Weekly.setFocusPainted(false);
         Weekly.setCursor(new Cursor(Cursor.HAND_CURSOR));
         panelForm.add(Weekly, gbc);
+
+        gbc.gridx = 1; gbc.gridy = 5; gbc.weightx = 0.3;
+        times = new JTextField();
+        styleTextField(times);
+        panelForm.add(times, gbc);
 
         add(panelForm, BorderLayout.CENTER);
 
@@ -206,6 +212,7 @@ public class AppointmentDialog extends JDialog {
         int startM = (int) spinStartMinute.getValue();
         int endH = (int) spinEndHour.getValue();
         int endM = (int) spinEndMinute.getValue();
+
 
         if (name.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ Tên", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
@@ -272,7 +279,8 @@ public class AppointmentDialog extends JDialog {
         }
 
      else {
-            int weeks = Weekly.isSelected() ? 4 : 1; // Nếu chọn hàng tuần thì tạo 4 lần, ngược lại tạo 1 lần
+         int n = Integer.parseInt(times.getText());
+            int weeks = Weekly.isSelected() ? n : 1; // Nếu chọn hàng tuần thì tạo n lần, ngược lại tạo 1 lần
             boolean allSuccess = true;
 
             for (int i = 0; i < weeks; i++) {
