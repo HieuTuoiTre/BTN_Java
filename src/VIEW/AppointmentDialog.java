@@ -10,6 +10,7 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.WeakHashMap;
 
 public class AppointmentDialog extends JDialog {
     private JTextField txtName;
@@ -19,9 +20,10 @@ public class AppointmentDialog extends JDialog {
     private JSpinner spinEndMinute;
     private RoundedButton btnSave;
     private RoundedButton btnCancel;
-    private JTextField times;
 
-    private JCheckBox Weekly;
+    private JCheckBox weeklyCheckBox;
+    private JTextField weeklyTextField;
+//    private final boolean weeklyChecked = weeklyCheckBox.isSelected();
 
     private LocalDate selectedDate;
     private Appointment appointmentToEdit;
@@ -38,7 +40,7 @@ public class AppointmentDialog extends JDialog {
         this.selectedDate = aptToEdit != null ? aptToEdit.getStartTime().toLocalDate() : date;
 
         setTitle(aptToEdit == null ? "Thêm Lịch Hẹn" : "Chỉnh Sửa Lịch Hẹn");
-        setSize(480, 550);
+        setSize(550, 650);
         setLocationRelativeTo(parent);
         setResizable(false);
         getContentPane().setBackground(COLOR_BG);
@@ -132,22 +134,38 @@ public class AppointmentDialog extends JDialog {
         panelEndTime.add(spinEndMinute);
         panelForm.add(panelEndTime, gbc);
 
-
-
         gbc.gridx = 1; gbc.gridy = 4;
         gbc.insets = new Insets(5, 0, 10, 15);
-        Weekly = new JCheckBox("Đặt lịch hàng tuần với số lần : ");
-        Weekly.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-        Weekly.setBackground(COLOR_BG);
-        Weekly.setForeground(COLOR_TEXT_DARK);
-        Weekly.setFocusPainted(false);
-        Weekly.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        panelForm.add(Weekly, gbc);
+        weeklyCheckBox = new JCheckBox("Đặt lịch hàng tuần với số lần : ");
+        weeklyCheckBox.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        weeklyCheckBox.setBackground(COLOR_BG);
+        weeklyCheckBox.setForeground(COLOR_TEXT_DARK);
+        weeklyCheckBox.setFocusPainted(false);
+        weeklyCheckBox.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        weeklyCheckBox.addActionListener(actionEvent ->
+        {
+            boolean isChecked = weeklyCheckBox.isSelected();
 
+            weeklyTextField.setEnabled(isChecked);
+
+            if (!isChecked){
+                weeklyTextField.setBackground(new Color(240, 240, 240));
+                weeklyTextField.setText("");
+            }else {
+                weeklyTextField.setBackground(Color.WHITE);
+                weeklyTextField.requestFocus();
+            }
+        });
+        panelForm.add(weeklyCheckBox, gbc);
+
+        //weekly textfield
         gbc.gridx = 1; gbc.gridy = 5; gbc.weightx = 0.3;
-        times = new JTextField();
-        styleTextField(times);
-        panelForm.add(times, gbc);
+        weeklyTextField = new JTextField();
+        styleTextField(weeklyTextField);
+        //gray out + lock from the beginning
+        weeklyTextField.setEnabled(false);
+        weeklyTextField.setBackground(new Color(240, 240, 240));
+        panelForm.add(weeklyTextField, gbc);
 
         add(panelForm, BorderLayout.CENTER);
 
@@ -278,16 +296,36 @@ public class AppointmentDialog extends JDialog {
             }
         }
 
-     else {
-         int n = Integer.parseInt(times.getText());
-            int weeks = Weekly.isSelected() ? n : 1; // Nếu chọn hàng tuần thì tạo n lần, ngược lại tạo 1 lần
+        else {
+            int weeks = 1; //default is set only for a single day
+
+            if (weeklyCheckBox.isSelected()){
+                try{
+                    weeks = Integer.parseInt(weeklyTextField.getText().trim());
+
+                    if (weeks <= 0){
+                        throw new NumberFormatException();
+                    }
+                }catch (NumberFormatException e){
+                    weeklyTextField.setText("");
+                    weeklyTextField.requestFocus();
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "Vui lòng nhập số nguyên và là số nguyên lớn hơn 0",
+                        "Lỗi dữ liệu",
+                        JOptionPane.WARNING_MESSAGE
+                    );
+                    return;
+                }
+            }
+
             boolean allSuccess = true;
 
+            //adding the extra weeks in
             for (int i = 0; i < weeks; i++) {
                 Appointment newAppointment = new Appointment();
                 newAppointment.setName(name + (weeks > 1 ? " (Tuần " + (i + 1) + ")" : ""));
 
-                // Cộng thêm i tuần vào thời gian bắt đầu và kết thúc
                 newAppointment.setStartTime(startTime.plusWeeks(i));
                 newAppointment.setEndTime(endTime.plusWeeks(i));
 
@@ -295,12 +333,13 @@ public class AppointmentDialog extends JDialog {
                 if (result.equals("SUCCESS")) {
                     ReminderDialog dialog = new ReminderDialog(AppointmentDialog.this, true, newAppointment, null);
                     dialog.setVisible(true);
-                    this.dispose();
-                }else allSuccess = false;
+                } else {
+                    allSuccess = false;
+                }
             }
 
             if (allSuccess) {
-                JOptionPane.showMessageDialog(this, "Đã thêm " + weeks + " cuộc hẹn thành công!");
+                JOptionPane.showMessageDialog(this, "Đã thêm " + weeks + " lịch hẹn thành công!");
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Có lỗi xảy ra trong quá trình tạo lịch lặp lại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
